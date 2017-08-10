@@ -1,0 +1,18 @@
+Google API key (prooject: udacity-map): AIzaSyCnyuDvErVDpci5foqVJtyoi2RtLdeiE6o
+
+ACTION PLAN:
+- Build the html frame with Bootstrap
+- Add Google API  
+- Get the location items (type: restaurant): 
+	+ Get all currently open restaurant within 100 meters from a location 
+
+"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=1000&type=restaurant&keyword=cruise&opennow&key=AIzaSyCnyuDvErVDpci5foqVJtyoi2RtLdeiE6o"
+
+- Add Functionalties with KO 
+	+ Filter Locations with Dropdown 
+	+ Filter by rating 
+	+ infoWindow: use Yelp API (https://www.yelp.com/developers/documentation/v2/overview) 
+
+
+*** TO-DOs ***
+- Translate Sidebar JS to KO 

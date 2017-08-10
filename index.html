@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<title>Food Nearby</title>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Custom Styles -->
+    <link rel=stylesheet href="css/custom.css">
+</head>
+<body>
+	<div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <nav id="spy">
+                <ul class="sidebar-nav nav">
+                    <li class="sidebar-brand">
+
+						<div class="dropdown">
+						  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						    Filter By Quality
+						    <span class="caret"></span>
+						  </button>
+
+						  <ul id = "ratingListWrapper" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+
+						  	<ul id = "ratingList" data-bind="foreach: ratingList">
+							    <li><a href="#" data-bind="html: stars, click: $parent.filterByRating"></a></li>
+						    </ul>
+						  	<li><button id="clearFilterButton" class="btn btn-sm btn-default" data-bind="visible: shouldShowButton, click: clearFiltering">Clear filtering</button></li>
+
+						  </ul>
+
+						</div>
+                    </li>
+
+					<!-- Location Listing -->
+
+					<li id="locationListWrapper">
+
+						<ul id="locationList" data-bind = "foreach: locationList">
+
+							<div data-bind="if: visible">
+			                    <li data-bind="click: $parent.getMarker, css: {highlight: $parent.activeMarkerID() == id()}">
+			                       	<a>
+			                            <span class="fa fa-anchor solo" data-bind = "text: title"></span>
+			                        </a>
+			                    </li>
+			                </div>
+
+	                    </ul>
+
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+
+            <div class="content-header">
+                <h1 id="home">
+                    <a id="menu-toggle" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                    Food Nearby
+                </h1>
+            </div>
+
+            <div class="page-content inset" data-spy="scroll" data-target="#spy">
+
+				<div class="input-group">
+					 <form id="locationKey">
+					  	<input type="text" class="form-control" placeholder="Search for eateries in your location" aria-describedby="basic-addon1">
+					  	<button class="btn btn-success" type="submit">Search</button>
+				  	</form>
+
+				</div>
+
+            	<div id="map"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript for Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Knockout.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+    <!-- Google Maps API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnyuDvErVDpci5foqVJtyoi2RtLdeiE6o&v=3&libraries=places&callback=getLocationInput">
+    </script>
+
+    <!-- My JS -->
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/responsive.js"></script>
+
+    <!-- Template -->
+    <script id="locationListTemplate" type="text/template" data-type="template">
+		<ul id="locationList" data-bind = "foreach: locationList">
+			<div data-bind="if: visible">
+                <li data-bind="click: $parent.getMarker, css: {highlight: $parent.activeMarkerID() == id()}">
+                   	<a>
+                        <span class="fa fa-anchor solo" data-bind = "text: title"></span>
+                    </a>
+                </li>
+            </div>
+        </ul>
+    </script>
+
+    <script id="ratingListTemplate" type="text/template" data-type="template">
+	  	<ul id = "ratingList" data-bind="foreach: ratingList">
+		    <li><a href="#" data-bind="html: stars, click: $parent.filterByRating"></a></li>
+	    </ul>
+	  	<li><button id="clearFilterButton" class="btn btn-sm btn-default" data-bind="visible: shouldShowButton, click: clearFiltering">Clear filtering</button></li>
+    </script>
+
+</body>
+</html>
