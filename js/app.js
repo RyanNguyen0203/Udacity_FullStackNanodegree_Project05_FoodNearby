@@ -1,17 +1,24 @@
-// Get the global scope
+/* GRAB GLOBAL SCOPE */
 var outer = this;
 
-// Define global constants
+
+/* GLOBAL CONSTANT */
 var ratingLimit = 4;
 var map;
 var markers = [];
 var locations = [];
 
-// Google Maps API callback function
+
+/* FIRST-LAYER FUNCTION */
+/* A function of level n+1 will be called inside the definition of a function of level n */
+
+// Google Maps API's Callback
+// Read user's input of location query
 function getLocationInput(){
-	// Read user's input of location query
+
 	var locationInput = "";
 
+	// Add event listener to handle form submission
 	$("#locationKey").submit(function(e){
 		e.preventDefault();
 		locationInput = $("#locationKey input").val();
@@ -25,11 +32,13 @@ function getLocationInput(){
 			geocoder = new google.maps.Geocoder();
 			geocoder.geocode( { 'address': locationInput}, function(results, status){
 				if (status == 'OK') {
+					// If there is no error with AJAX call
 					var locationObject = results[0].geometry.location;
 					var lat = locationObject.lat();
 					var lng = locationObject.lng();
 					initMap(lat, lng); /* Create map */
 	      		} else {
+	      			// Notify user about the AJAX call error
 	      			$("#map").html('Geocode was not successful for the following reason: ' + status);
 	      		};
 	      	});
@@ -41,7 +50,13 @@ function getLocationInput(){
 	});
 };
 
+
+/* SECOND-LAYER FUNCTION */
+
+// Load map & request for eateries
 function initMap(lat, lng){
+
+	// Initialize map
 	var pyrmont = new google.maps.LatLng(lat, lng);
 
 	map = new google.maps.Map(document.getElementById('map'), {
@@ -49,43 +64,34 @@ function initMap(lat, lng){
 	  zoom: 13
 	});
 
+	// Create request
 	var request = {
 	    location: pyrmont,
 	    radius: '500',
 	    type: ['restaurant']
   	};
 
+  	// Create service object
 	service = new google.maps.places.PlacesService(map);
+
+	// Search for relevant eateries
+	// Callback: populateLocations
 	service.nearbySearch(request, populateLocations);
 };
 
-// This function populates the infowindow when the marker is clicked. We'll only allow
-// one infowindow which will open at the marker that is clicked, and populate based
-// on that markers position.
-function populateInfoWindow(marker, infowindow) {
-// Check to make sure the infowindow is not already opened on this marker.
-if (infowindow.marker != marker) {
-	infowindow.marker = marker;
-	infowindow.setContent('<div>' + marker.title + '</div>');
-	infowindow.open(map, marker);
-	// Make sure the marker property is cleared if the infowindow is closed.
-	infowindow.addListener('closeclick',function(){
-		infowindow.setMarker = null;
-	});
-	}
-}
 
+/* THIRD-LAYER FUNCTION */
+
+// service.nearbySearch's callback
+// Handling response
 function populateLocations(results, status) {
-	// Get place objects to populate |locations|
 
   if (status == google.maps.places.PlacesServiceStatus.OK) {
   	var i = 0;
+
+  	// Parse a returned data
+  	// And put them into the predefined global array locations
   	results.forEach(function(locationItem){
-  		// Debug
-  		// console.log(locationItem.geometry.location.lat());
-  		// console.log(locationItem.geometry.location.lng());
-  		// console.log(locationItem.name);
-  		// console.log(locationItem);
 
   		var newItem = {
   			id: i,
@@ -97,23 +103,21 @@ function populateLocations(results, status) {
   			}
   		};
 
-  		// Debug
-  		// console.log(newItem);
-
   		locations.push(newItem);
   		i++;
   	});
 
-  	// Debug
-  	// console.log("callback: populateLocations called");
-  	// console.log("locations:");
-  	// console.log(locations);
-
+  	// Create location markers
   	makeMarkers();
 
-  }
-}
+  };
+};
 
+
+
+/* FOURTH-LAYER FUNCTION */
+
+// Create location markers
 function makeMarkers(){
 	// Add markers to map based on the places in |location|
 	var largeInfowindow = new google.maps.InfoWindow();
@@ -151,6 +155,24 @@ function makeMarkers(){
 	// Implement knockout.js
 	console.log("knockOUt called");
 	knockOut();
+}
+
+
+/* FIFTH-LAYER FUNCTIONS */
+
+// Populate the location's infowindow when the location's marker is clicked
+function populateInfoWindow(marker, infowindow) {
+
+	// Check to make sure the infowindow is not already opened on this marker.
+	if (infowindow.marker != marker) {
+		infowindow.marker = marker;
+		infowindow.setContent('<div>' + marker.title + '</div>');
+		infowindow.open(map, marker);
+		// Make sure the marker property is cleared if the infowindow is closed.
+		infowindow.addListener('closeclick',function(){
+			infowindow.setMarker = null;
+		});
+	}
 }
 
 // Knockout.js Implementation
@@ -320,7 +342,8 @@ function knockOut() {
 
 };
 
-// Helper Functions
+
+/* HELPER FUNCTION */
 
 function makeMarkerIcon(markerColor) {
 	var markerImage = new google.maps.MarkerImage(
