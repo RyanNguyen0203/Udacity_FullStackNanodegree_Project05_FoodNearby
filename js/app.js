@@ -83,7 +83,7 @@ function initMap(lat, lng){
 /* THIRD-LAYER FUNCTION */
 
 // service.nearbySearch's callback
-// Handling response
+// Handle response
 function populateLocations(results, status) {
 
   if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -117,9 +117,8 @@ function populateLocations(results, status) {
 
 /* FOURTH-LAYER FUNCTION */
 
-// Create location markers
+// Add location markers to map
 function makeMarkers(){
-	// Add markers to map based on the places in |location|
 	var largeInfowindow = new google.maps.InfoWindow();
 	var bounds = new google.maps.LatLngBounds();
 
@@ -153,7 +152,7 @@ function makeMarkers(){
 	map.fitBounds(bounds);
 
 	// Implement knockout.js
-	console.log("knockOUt called");
+	console.log("knockout called");
 	knockOut();
 }
 
@@ -176,6 +175,7 @@ function populateInfoWindow(marker, infowindow) {
 }
 
 // Knockout.js Implementation
+// Add front-end logic to area aside from the Google Map
 
 function knockOut() {
 
@@ -206,10 +206,10 @@ function knockOut() {
 
 
 	var ViewModel = function() {
-		// Debug
-		// console.log("ViewModel called!");
 
 		var self = this;
+
+		// Create observable array of rating objects
 
 		self.ratingList = ko.observableArray([]);
 
@@ -217,9 +217,8 @@ function knockOut() {
 			self.ratingList.push(new Rating(ratingLimit-i+1));
 		};
 
-		// Debug
-		// console.log(self.ratingList());
-		// console.log(self.ratingList()[0].rating());
+
+		// Create observable array of location objects
 
 		self.locationList = ko.observableArray([]);
 
@@ -227,15 +226,13 @@ function knockOut() {
 			self.locationList.push(new Location(dataItem));
 		});
 
-		// Debug
-		console.log(self.locationList());
 
 		// "Clear Filtering" button
 		// When there is no filtering, do not show "Clear Filtering" button
 		self.shouldShowButton = ko.observable(false);
 
 		self.clearFiltering = function(){
-			// Reset all location.visible to true
+			// Reset all location.visible to true, display all locations
 			for (i=0; i<self.locationList().length; i++){
 				self.location = self.locationList()[i];
 				self.location.visible(true);
@@ -314,13 +311,6 @@ function knockOut() {
 
 	};
 
-
-	// // Clean all current KO data-binding from the DOM
-	// // ko.cleanNode(document);
-	// ko.cleanNode(document.getElementById("#locationList"));
-	// ko.cleanNode(document.getElementById("#ratingList"));
-	// // Debug
-	// console.log("clear previous binding");
 
 	// var locationListTemplate = $("<ul id='locationList' data-bind = 'foreach: locationList'><div data-bind='if: visible'><li data-bind='click: $parent.getMarker, css: {highlight: $parent.activeMarkerID() == id()}'><a><span class='fa fa-anchor solo' data-bind = 'text: title'></span></a></li></div></ul>");
 	var locationListTemplate = $("#locationListTemplate").html();
